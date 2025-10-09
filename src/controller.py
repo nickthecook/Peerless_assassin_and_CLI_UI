@@ -151,57 +151,8 @@ class Controller:
                 segment_index = digit_map[segment_name]
                 self.leds[segment_index] = 1
 
-    def display_dual_metrics(self):
-        if not self.layout:
-            print("Warning: layout.json not loaded. Cannot display dual metrics.")
-            return
-
-        cpu_unit = self.config.get('cpu_temperature_unit', 'celsius')
-        gpu_unit = self.config.get('gpu_temperature_unit', 'celsius')
-        temp_unit = {'cpu': cpu_unit, 'gpu': gpu_unit}
-
-        metrics = self.metrics.get_metrics(temp_unit=temp_unit)
-        cpu_temp = metrics.get("cpu_temp", 0)
-        cpu_usage = metrics.get("cpu_usage", 0)
-        gpu_temp = metrics.get("gpu_temp", 0)
-        gpu_usage = metrics.get("gpu_usage", 0)
-
-        # Draw CPU Temp
-        self.draw_number(cpu_temp, 3, self.layout['cpu_temp_digits'])
-        if cpu_unit == 'celsius':
-            self.leds[self.layout['cpu_celsius']] = 1
-        else:
-            self.leds[self.layout['cpu_fahrenheit']] = 1
-
-        # Draw CPU Usage
-        self.draw_number(cpu_usage % 100, 2, self.layout['cpu_usage_digits'])
-        if cpu_usage >= 100:
-            self.leds[self.layout['cpu_usage_1']['top']] = 1
-            self.leds[self.layout['cpu_usage_1']['bottom']] = 1
-        self.leds[self.layout['cpu_percent']] = 1
-
-        # Draw GPU Temp
-        self.draw_number(gpu_temp, 3, self.layout['gpu_temp_digits'])
-        if gpu_unit == 'celsius':
-            self.leds[self.layout['gpu_celsius']] = 1
-        else:
-            self.leds[self.layout['gpu_fahrenheit']] = 1
-
-        # Draw GPU Usage
-        self.draw_number(gpu_usage % 100, 2, self.layout['gpu_usage_digits'])
-        if gpu_usage >= 100:
-            self.leds[self.layout['gpu_usage_1']['top']] = 1
-            self.leds[self.layout['gpu_usage_1']['bottom']] = 1
-        self.leds[self.layout['gpu_percent']] = 1
-        
-        # Set CPU and GPU LEDs
-        for led in self.layout['cpu_led']:
-            self.leds[led] = 1
-        for led in self.layout['gpu_led']:
-            self.leds[led] = 1
-
     def display_peerless_standard(self):
-        self.colors = self.metrics_colors
+        """Merged display mode: dual_metrics + peerless_standard with color support"""
         if not self.layout:
             print("Warning: layout.json not loaded. Cannot display peerless standard.")
             return
@@ -211,6 +162,10 @@ class Controller:
         temp_unit = {'cpu': cpu_unit, 'gpu': gpu_unit}
 
         metrics = self.metrics.get_metrics(temp_unit=temp_unit)
+        
+        # Get colors based on current metrics
+        self.colors = self.get_config_colors(self.config, key="metrics", metrics=metrics)
+
         cpu_temp = metrics.get("cpu_temp", 0)
         cpu_usage = metrics.get("cpu_usage", 0)
         gpu_temp = metrics.get("gpu_temp", 0)
@@ -238,7 +193,7 @@ class Controller:
             self.leds[self.layout['gpu_fahrenheit']] = 1
 
         # Draw GPU Usage
-        self.draw_number(gpu_usage % 100, 2, self.layout['gpu_usage_digits'])
+        self.draw_number(gpu_usage % 100, 2, self.layout['gpu_usage_digits'][::-1])
         if gpu_usage >= 100:
             self.leds[self.layout['gpu_usage_1']['top']] = 1
             self.leds[self.layout['gpu_usage_1']['bottom']] = 1
@@ -251,7 +206,6 @@ class Controller:
             self.leds[led] = 1
 
     def display_peerless_temp(self):
-        self.colors = self.metrics_colors.copy()
         if not self.layout:
             print("Warning: layout.json not loaded. Cannot display peerless temp.")
             return
@@ -261,6 +215,8 @@ class Controller:
         temp_unit = {'cpu': cpu_unit, 'gpu': gpu_unit}
 
         metrics = self.metrics.get_metrics(temp_unit=temp_unit)
+        self.colors = self.get_config_colors(self.config, key="metrics", metrics=metrics)
+        
         cpu_temp = metrics.get("cpu_temp", 0)
         gpu_temp = metrics.get("gpu_temp", 0)
 
@@ -285,12 +241,17 @@ class Controller:
             self.leds[led] = 1
 
     def display_peerless_usage(self):
-        self.colors = self.metrics_colors
         if not self.layout:
             print("Warning: layout.json not loaded. Cannot display peerless usage.")
             return
 
-        metrics = self.metrics.get_metrics(temp_unit=self.temp_unit)
+        cpu_unit = self.config.get('cpu_temperature_unit', 'celsius')
+        gpu_unit = self.config.get('gpu_temperature_unit', 'celsius')
+        temp_unit = {'cpu': cpu_unit, 'gpu': gpu_unit}
+
+        metrics = self.metrics.get_metrics(temp_unit=temp_unit)
+        self.colors = self.get_config_colors(self.config, key="metrics", metrics=metrics)
+        
         cpu_usage = metrics.get("cpu_usage", 0)
         gpu_usage = metrics.get("gpu_usage", 0)
 
@@ -357,12 +318,14 @@ class Controller:
         else:
             print(f"Warning: {device} usage not available.")
 
-    def get_config_colors(self, config, key="metrics"):
+    def get_config_colors(self, config, key="metrics", metrics=None):
         conf_colors = config.get(key, {}).get('colors', ["ffe000"] * NUMBER_OF_LEDS)
         if len(conf_colors) != NUMBER_OF_LEDS:
             print(f"Warning: config {key} colors length mismatch, using default colors.")
             colors = ["ff0000"] * NUMBER_OF_LEDS
         else:
+            if metrics is None:
+                metrics = self.metrics.get_metrics(self.temp_unit)
             colors = []
             for color in conf_colors:
                 if color.lower() == "random":
@@ -377,12 +340,12 @@ class Controller:
                     
                     stops.sort(key=lambda x: x['value'])
                     
-                    if metric not in self.metrics.get_metrics(self.temp_unit):
+                    if metric not in metrics:
                         print(f"Warning: {metric} not found in metrics, using first color.")
                         colors.append(stops[0]['color'])
                         continue
 
-                    metric_value = self.metrics.get_metrics(self.temp_unit)[metric]
+                    metric_value = metrics[metric]
 
                     if metric_value <= stops[0]['value']:
                         colors.append(stops[0]['color'])
@@ -411,14 +374,14 @@ class Controller:
                         elif metric == "hours":
                             factor = current_time.hour / 23
                         else:
-                            if metric not in self.metrics.get_metrics(self.temp_unit):
+                            if metric not in metrics:
                                 print(f"Warning: {metric} not found in metrics, using start color.")
                                 factor = 0
                             elif self.metrics_min_value[metric] == self.metrics_max_value[metric]:
                                 print(f"Warning: {metric} min and max values are the same, using start color.")
                                 factor = 0
                             else:
-                                metric_value = self.metrics.get_metrics(self.temp_unit)[metric]
+                                metric_value = metrics[metric]
                                 min_val = self.metrics_min_value[metric]
                                 max_val = self.metrics_max_value[metric]
                                 factor = (metric_value - min_val) / (max_val - min_val)
@@ -451,6 +414,11 @@ class Controller:
                 "gpu_usage": self.config.get('gpu_min_usage', 0),
             }
             self.display_mode = self.config.get('display_mode', 'metrics')
+            
+            # Handle legacy dual_metrics mode
+            if self.display_mode == 'dual_metrics':
+                self.display_mode = 'peerless_standard'
+                
             self.temp_unit = {device: self.config.get(f"{device}_temperature_unit", "celsius") for device in ["cpu", "gpu"]}
             self.metrics_colors = self.get_config_colors(self.config, key="metrics")
             self.time_colors = self.get_config_colors(self.config, key="time")
@@ -544,8 +512,6 @@ class Controller:
                     self.display_usage_small(device='cpu')
                 elif self.display_mode == "gpu_usage":
                     self.display_usage_small(device='gpu')
-                elif self.display_mode == "dual_metrics":
-                    self.display_dual_metrics()
                 elif self.display_mode == "peerless_standard":
                     self.display_peerless_standard()
                 elif self.display_mode == "peerless_temp":
@@ -563,7 +529,6 @@ class Controller:
             time.sleep(self.update_interval)
 
 
-
 def main(config_path):
     controller = Controller(config_path=config_path)
     controller.display()
@@ -576,4 +541,3 @@ if __name__ == '__main__':
         print("No config path provided, using default.")
         config_path = None
     main(config_path)
-

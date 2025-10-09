@@ -25,9 +25,9 @@ fi
 # Function to display the main menu
 show_main_menu() {
     clear
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║     LED Display Control - Main Menu                   ║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
     echo -e "${GREEN}1)${NC} Change Display Mode"
     echo -e "${GREEN}2)${NC} Change LED Colors"
@@ -45,28 +45,27 @@ show_main_menu() {
 # Function to display display modes menu
 show_display_modes_menu() {
     clear
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║     Select Display Mode                                ║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
     echo -e "${MAGENTA}Big Layout Modes (84 LEDs):${NC}"
-    echo -e "${GREEN}1)${NC} dual_metrics         - Show CPU & GPU metrics simultaneously"
-    echo -e "${GREEN}2)${NC} peerless_standard    - Peerless Assassin 120 standard display"
-    echo -e "${GREEN}3)${NC} peerless_temp        - Temperature focus mode"
-    echo -e "${GREEN}4)${NC} peerless_usage       - Usage focus mode"
-    echo -e "${GREEN}5)${NC} metrics              - Standard metrics display"
-    echo -e "${GREEN}6)${NC} time                 - Time display with seconds"
-    echo -e "${GREEN}7)${NC} time_cpu             - Time with GPU metrics"
-    echo -e "${GREEN}8)${NC} time_gpu             - Time with CPU metrics"
-    echo -e "${GREEN}9)${NC} alternate_time       - Alternate between time displays"
-    echo -e "${GREEN}10)${NC} debug_ui             - Debug mode (all LEDs on)"
+    echo -e "${GREEN}1)${NC} peerless_standard    - Peerless Assassin 120 standard display"
+    echo -e "${GREEN}2)${NC} peerless_temp        - Temperature focus mode"
+    echo -e "${GREEN}3)${NC} peerless_usage       - Usage focus mode"
+    echo -e "${GREEN}4)${NC} metrics              - Standard metrics display"
+    echo -e "${GREEN}5)${NC} time                 - Time display with seconds"
+    echo -e "${GREEN}6)${NC} time_cpu             - Time with GPU metrics"
+    echo -e "${GREEN}7)${NC} time_gpu             - Time with CPU metrics"
+    echo -e "${GREEN}8)${NC} alternate_time       - Alternate between time displays"
+    echo -e "${GREEN}9)${NC} debug_ui             - Debug mode (all LEDs on)"
     echo ""
     echo -e "${MAGENTA}Small Layout Modes (31 LEDs):${NC}"
-    echo -e "${GREEN}11)${NC} alternate_metrics    - Cycle through CPU/GPU temp/usage"
-    echo -e "${GREEN}12)${NC} cpu_temp             - Show CPU temperature only"
-    echo -e "${GREEN}13)${NC} gpu_temp             - Show GPU temperature only"
-    echo -e "${GREEN}14)${NC} cpu_usage            - Show CPU usage only"
-    echo -e "${GREEN}15)${NC} gpu_usage            - Show GPU usage only"
+    echo -e "${GREEN}10)${NC} alternate_metrics    - Cycle through CPU/GPU temp/usage"
+    echo -e "${GREEN}11)${NC} cpu_temp             - Show CPU temperature only"
+    echo -e "${GREEN}12)${NC} gpu_temp             - Show GPU temperature only"
+    echo -e "${GREEN}13)${NC} cpu_usage            - Show CPU usage only"
+    echo -e "${GREEN}14)${NC} gpu_usage            - Show GPU usage only"
     echo ""
     echo -e "${GREEN}0)${NC} Back to main menu"
     echo ""
@@ -75,24 +74,23 @@ show_display_modes_menu() {
 # Function to change display mode
 change_display_mode() {
     show_display_modes_menu
-    read -p "Select mode (0-15): " choice
+    read -p "Select mode (0-14): " choice
 
     case $choice in
-        1) mode="dual_metrics" ;;
-        2) mode="peerless_standard" ;;
-        3) mode="peerless_temp" ;;
-        4) mode="peerless_usage" ;;
-        5) mode="metrics" ;;
-        6) mode="time" ;;
-        7) mode="time_cpu" ;;
-        8) mode="time_gpu" ;;
-        9) mode="alternate_time" ;;
-        10) mode="debug_ui" ;;
-        11) mode="alternate_metrics" ;;
-        12) mode="cpu_temp" ;;
-        13) mode="gpu_temp" ;;
-        14) mode="cpu_usage" ;;
-        15) mode="gpu_usage" ;;
+        1) mode="peerless_standard" ;;
+        2) mode="peerless_temp" ;;
+        3) mode="peerless_usage" ;;
+        4) mode="metrics" ;;
+        5) mode="time" ;;
+        6) mode="time_cpu" ;;
+        7) mode="time_gpu" ;;
+        8) mode="alternate_time" ;;
+        9) mode="debug_ui" ;;
+        10) mode="alternate_metrics" ;;
+        11) mode="cpu_temp" ;;
+        12) mode="gpu_temp" ;;
+        13) mode="cpu_usage" ;;
+        14) mode="gpu_usage" ;;
         0) return ;;
         *)
             echo -e "${RED}Invalid choice${NC}"
@@ -109,9 +107,9 @@ change_display_mode() {
 # Function to show color menu
 show_color_menu() {
     clear
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║     LED Color Configuration                            ║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
     echo -e "${GREEN}1)${NC} Set All LEDs to Single Color"
     echo -e "${GREEN}2)${NC} Set CPU LEDs Color"
@@ -264,7 +262,6 @@ set_metric_gradient() {
 }
 
 # Function to change LED colors
-# Function to change LED colors
 change_led_colors() {
     show_color_menu
     read -p "Select option (0-8): " choice
@@ -381,9 +378,9 @@ change_led_colors() {
 # Function to apply color presets
 color_presets() {
     clear
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║     Color Presets                                        ║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
     echo -e "${GREEN}1)${NC} Red"
     echo -e "${GREEN}2)${NC} Green"
@@ -445,9 +442,9 @@ color_presets() {
 # Function to configure temperature settings
 configure_temperature() {
     clear
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║     Temperature Configuration                          ║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
 
     current_cpu_unit=$(jq -r '.cpu_temperature_unit' "$CONFIG_FILE")
@@ -511,9 +508,9 @@ configure_temperature() {
 # Function to configure update intervals
 configure_intervals() {
     clear
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║     Update Interval Configuration                      ║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
 
     current_update=$(jq -r '.update_interval' "$CONFIG_FILE")
@@ -538,14 +535,13 @@ configure_intervals() {
 }
 
 # Function to apply quick presets
-# Function to apply quick presets
 quick_presets() {
     clear
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║     Quick Presets                                      ║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
-    echo -e "${GREEN}1)${NC} Gaming Mode (dual_metrics, temp-based colors)"
+    echo -e "${GREEN}1)${NC} Gaming Mode (peerless_standard, temp-based colors)"
     echo -e "${GREEN}2)${NC} RGB Rainbow (animated gradient)"
     echo -e "${GREEN}3)${NC} Stealth Mode (all black/dim)"
     echo -e "${GREEN}4)${NC} Cool Blue Theme"
@@ -562,7 +558,7 @@ quick_presets() {
 
     case $choice in
         1)
-            jq '.display_mode = "dual_metrics"' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp" && mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
+            jq '.display_mode = "peerless_standard"' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp" && mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
             # Set CPU temp-based colors for CPU section, GPU temp-based for GPU section
             set_led_range_color 0 41 "00ff00-ff0000-cpu_temp" "metrics"
             set_led_range_color 42 83 "0000ff-ff0000-gpu_temp" "metrics"
@@ -612,15 +608,52 @@ quick_presets() {
             echo -e "${GREEN}Usage gradient preset applied${NC}"
             ;;
         9)
-            # Quadrant Metric Colors
-            local temp_gradient_str=";0000ff:30;00ff00:45;ffff00:60;ff8c00:75;ff0000:100"
-            local usage_gradient_str=";0000ff:30;00ff00:45;ffff00:60;ff8c00:75;ff0000:100"
+            # Quadrant Metric Colors - Fixed to include LED and unit indicators
+            local temp_gradient_str="cpu_temp;0000ff:30;00ff00:45;ffff00:60;ff8c00:75;ff0000:100"
+            local usage_gradient_str="cpu_usage;0000ff:30;00ff00:45;ffff00:60;ff8c00:75;ff0000:100"
+            local gpu_temp_gradient="gpu_temp;0000ff:30;00ff00:45;ffff00:60;ff8c00:75;ff0000:100"
+            local gpu_usage_gradient="gpu_usage;0000ff:30;00ff00:45;ffff00:60;ff8c00:75;ff0000:100"
 
-            set_led_range_color 2 23 "cpu_temp${temp_gradient_str}" "metrics"
-            set_led_range_color 25 41 "cpu_usage${usage_gradient_str}" "metrics"
-            set_led_range_color 61 81 "gpu_temp${temp_gradient_str}" "metrics"
-            set_led_range_color 43 58 "gpu_usage${usage_gradient_str}" "metrics"
-            
+            # CPU LED (0-1)
+            set_led_range_color 0 1 "$temp_gradient_str" "metrics"
+
+            # CPU Temp digits (2-22)
+            set_led_range_color 2 22 "$temp_gradient_str" "metrics"
+
+            # CPU Celsius indicator (23)
+            set_led_range_color 23 23 "$temp_gradient_str" "metrics"
+
+            # CPU Fahrenheit indicator (24) - skip
+
+            # CPU Usage 1 indicator (25-26)
+            set_led_range_color 25 26 "$usage_gradient_str" "metrics"
+
+            # CPU Usage digits (27-40)
+            set_led_range_color 27 40 "$usage_gradient_str" "metrics"
+
+            # CPU Percent (41)
+            set_led_range_color 41 41 "$usage_gradient_str" "metrics"
+
+            # GPU Percent (42)
+            set_led_range_color 42 42 "$gpu_usage_gradient" "metrics"
+
+            # GPU Usage digits (43-56)
+            set_led_range_color 43 56 "$gpu_usage_gradient" "metrics"
+
+            # GPU Usage 1 indicator (57-58)
+            set_led_range_color 57 58 "$gpu_usage_gradient" "metrics"
+
+            # GPU Celsius indicator (59)
+            set_led_range_color 59 59 "$gpu_temp_gradient" "metrics"
+
+            # GPU Fahrenheit indicator (60) - skip
+
+            # GPU Temp digits (61-81)
+            set_led_range_color 61 81 "$gpu_temp_gradient" "metrics"
+
+            # GPU LED (82-83)
+            set_led_range_color 82 83 "$gpu_temp_gradient" "metrics"
+
             echo -e "${GREEN}Quadrant Metric Colors preset applied${NC}"
             ;;
         0) return ;;
@@ -634,9 +667,9 @@ quick_presets() {
 # Function to view current configuration
 view_config() {
     clear
-    echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║     Current Configuration                              ║${NC}"
-    echo -e "${CYAN}╚════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
 
     echo -e "${YELLOW}Display Mode:${NC} $(jq -r '.display_mode' "$CONFIG_FILE")"
