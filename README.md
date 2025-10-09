@@ -15,6 +15,10 @@ It provides a Python controller to display system metrics (CPU/GPU temp/usage) a
 ## Prerequisites
 
 - Python 3
+- `jq` command-line JSON processor.
+  - On Arch Linux: `sudo pacman -S jq`
+  - On Debian/Ubuntu: `sudo apt-get install jq`
+  - On Fedora: `sudo dnf install jq`
 - `hidapi` library for your distribution.
   - On Arch Linux: `sudo pacman -S hidapi`
   - On Debian/Ubuntu: `sudo apt-get install libhidapi-dev`
