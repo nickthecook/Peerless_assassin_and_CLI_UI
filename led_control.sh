@@ -538,6 +538,7 @@ configure_intervals() {
 }
 
 # Function to apply quick presets
+# Function to apply quick presets
 quick_presets() {
     clear
     echo -e "${CYAN}╔════════════════════════════════════════════════════════╗${NC}"
@@ -552,11 +553,12 @@ quick_presets() {
     echo -e "${GREEN}6)${NC} Matrix Theme (green)"
     echo -e "${GREEN}7)${NC} Temperature Gradient Preset"
     echo -e "${GREEN}8)${NC} Usage Gradient Preset"
+    echo -e "${GREEN}9)${NC} Quadrant Metric Colors"
     echo ""
     echo -e "${GREEN}0)${NC} Back to main menu"
     echo ""
 
-    read -p "Select preset (0-8): " choice
+    read -p "Select preset (0-9): " choice
 
     case $choice in
         1)
@@ -608,6 +610,18 @@ quick_presets() {
             set_led_range_color 0 41 "$usage_gradient_cpu" "metrics"
             set_led_range_color 42 83 "$usage_gradient_gpu" "metrics"
             echo -e "${GREEN}Usage gradient preset applied${NC}"
+            ;;
+        9)
+            # Quadrant Metric Colors
+            local temp_gradient_str=";0000ff:30;00ff00:45;ffff00:60;ff8c00:75;ff0000:100"
+            local usage_gradient_str=";0000ff:30;00ff00:45;ffff00:60;ff8c00:75;ff0000:100"
+
+            set_led_range_color 2 23 "cpu_temp${temp_gradient_str}" "metrics"
+            set_led_range_color 25 41 "cpu_usage${usage_gradient_str}" "metrics"
+            set_led_range_color 61 81 "gpu_temp${temp_gradient_str}" "metrics"
+            set_led_range_color 43 58 "gpu_usage${usage_gradient_str}" "metrics"
+            
+            echo -e "${GREEN}Quadrant Metric Colors preset applied${NC}"
             ;;
         0) return ;;
         *)
