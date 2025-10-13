@@ -19,10 +19,11 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Create udev rule
-UDEV_RULE_FILE="/etc/udev/rules.d/99-digital-thermal-right-lcd.rules"
+UDEV_RULE_FILE="/etc/udev/rules.d/70-digital-thermal-right-lcd.rules"
 if [ ! -f "$UDEV_RULE_FILE" ]; then
   echo "Creating udev rule at $UDEV_RULE_FILE"
   echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="8001", MODE="0666"' > "$UDEV_RULE_FILE"
+  echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="8001", TAG+="uaccess"' >> "$UDEV_RULE_FILE"
   udevadm control --reload-rules
   udevadm trigger
   echo "udev rule created."

@@ -22,7 +22,7 @@ fi
 systemctl daemon-reload
 
 # Remove the udev rule
-UDEV_RULE_FILE="/etc/udev/rules.d/99-digital-thermal-right-lcd.rules"
+UDEV_RULE_FILE="/etc/udev/rules.d/70-digital-thermal-right-lcd.rules"
 if [ -f "$UDEV_RULE_FILE" ]; then
   echo "Removing udev rule..."
   rm "$UDEV_RULE_FILE"
